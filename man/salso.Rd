@@ -9,20 +9,20 @@ salso(psm, loss = c("VI.lb", "binder")[1], maxSize = 0, maxScans = 5,
 }
 \arguments{
 \item{psm}{A pairwise similarity matrix, i.e., \code{n}-by-\code{n} symmetric
-matrix whose \code{(i,j)} elements gives the (estimated) probability that
+matrix whose \code{(i,j)} element gives the (estimated) probability that
 items \code{i} and \code{j} are in the same subset (i.e., cluster) of a
 partition (i.e., clustering).}
 
 \item{loss}{Either \code{"VI.lb"} or \code{"binder"}, to indicate the desired
 loss function.}
 
-\item{maxSize}{Either zero or a positive integer.  If a positive integer, the
+\item{maxSize}{Either zero or a positive integer. If a positive integer, the
 optimization is constrained to produce solutions whose number of subsets
-(i.e., clusters) is no more than the supplied value.  If zero, the size is
+(i.e., clusters) is no more than the supplied value. If zero, the size is
 not constrained.}
 
 \item{maxScans}{The maximum number of reallocation scans after the intial
-allocation.  The actual number of scans may be less than \code{maxScans}
+allocation. The actual number of scans may be less than \code{maxScans}
 since the method stops if the result does not change between scans.}
 
 \item{nPermutations}{The desired number of permutations to consider when
@@ -30,8 +30,8 @@ searching for the minimizer.}
 
 \item{seconds}{A time threshold in seconds after which the function will
 return early (with a warning) instead of finishing all the desired
-permutations.  Note that the function could take considerably larger,
-however, because this threadhold is only checked after each permutation is
+permutations. Note that the function could take considerably longer,
+however, because this threshold is only checked after each permutation is
 completed.}
 
 \item{parallel}{Should the search use all CPU cores?}
@@ -48,14 +48,41 @@ A list of the following elements: \describe{ \item{estimate}{An
 \description{
 This function provides a point estimate for a partition distribution using
 the sequentially-allocated latent structure optimization (SALSO) method. The
-method seeks to minimize the Binder loss or the lower bound of the variation
-of information loss. The SALSO method was presented at the workshop "Bayesian
-Nonparametric Inference: Dependence Structures and their Applications" in
-Oaxaca, Mexico on December 6, 2017. See
+method seeks to minimize the expectation of the Binder loss or the lower
+bound of the expectation of the variation of information loss. The SALSO
+method was presented at the workshop "Bayesian Nonparametric Inference:
+Dependence Structures and their Applications" in Oaxaca, Mexico on December
+6, 2017. See
 <https://www.birs.ca/events/2017/5-day-workshops/17w5060/schedule>.
 }
 \examples{
 probs <- psm(iris.clusterings, parallel=FALSE)
 salso(probs, nPermutations=50, parallel=FALSE)
 
+}
+\references{
+D. A. Binder (1978), Bayesian cluster analysis, \emph{Biometrika} \bold{65},
+31-38.
+
+D. B. Dahl (2006), Model-Based Clustering for Expression Data via a Dirichlet
+Process Mixture Model, in \emph{Bayesian Inference for Gene Expression and
+Proteomics}, Kim-Anh Do, Peter Müller, Marina Vannucci (Eds.), Cambridge
+University Press.
+
+J. W. Lau and P. J. Green (2007), Bayesian model based clustering procedures,
+\emph{Journal of Computational and Graphical Statistics} \bold{16}, 526-558.
+D. B. Dahl, M. A. Newton (2007), Multiple Hypothesis Testing by Clustering
+Treatment Effects, \emph{Journal of the American Statistical Association},
+\bold{102}, 517-526.
+
+A. Fritsch and K. Ickstadt (2009), An improved criterion for clustering
+based on the posterior similarity matrix, \emph{Bayesian Analysis},
+\bold{4}, 367-391.
+
+S. Wade and Z. Ghahramani (2018), Bayesian cluster analysis: Point
+estimation and credible balls. \emph{Bayesian Analysis}, \bold{13:2},
+559-626.
+}
+\seealso{
+\code{\link{psm}}, \code{\link{confidence}}, \code{\link{dlso}}
 }

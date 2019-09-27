@@ -21,7 +21,8 @@ These functions compute the Bell number (the number of partitions of a set)
 or its natural logarithm.
 }
 \examples{
-all.equal( bell(5), exp(lbell(5)) )
+bell(12)
 lbell(300)
+all.equal( bell(5), exp(lbell(5)) )
 
 }

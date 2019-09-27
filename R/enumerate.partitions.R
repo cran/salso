@@ -13,7 +13,7 @@
 #' @export
 #' @useDynLib salso .enumerate_partitions
 #' @examples
-#' enumerate.partitions(3)
+#' enumerate.partitions(5)
 #'
 enumerate.partitions <- function(nItems) {
   if ( nItems > 13 ) stop("Long vectors are not supported; 'nItems' may be at most 13.")

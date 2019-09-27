@@ -20,6 +20,6 @@ as cluster labels, where two items are in the same subset (i.e., cluster) if
 their labels are equal.
 }
 \examples{
-enumerate.partitions(3)
+enumerate.partitions(5)
 
 }
