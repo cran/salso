@@ -21,12 +21,14 @@ void dahl_salso__minimize_by_salso(int32_t n_items,
                                    int32_t max_size,
                                    int32_t max_scans,
                                    int32_t n_permutations,
+                                   double probability_of_exploration,
                                    double seconds,
                                    int32_t parallel,
                                    int32_t *results_labels_ptr,
                                    double *results_expected_loss_ptr,
                                    int32_t *results_scans_ptr,
-                                   int32_t *results_actual_n_permutations_ptr);
+                                   int32_t *results_actual_n_permutations_ptr,
+                                   const int32_t *seed_ptr);
 
 void dahl_salso__psm(int32_t n_partitions,
                      int32_t n_items,
