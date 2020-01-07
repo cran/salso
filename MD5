@@ -1,8 +1,8 @@
-2e06279cbe678542795207ee821fa366 *DESCRIPTION
+a07c0de02dd62a03b87b7d51db79538d *DESCRIPTION
 80a6a647d9dc8045a3eaa8c9d5a4df81 *INSTALL
 45fc42e4fbff18014fa3397fbf5b5b55 *LICENSE
 8e8501ca00a05a39c5c6319996cf6174 *NAMESPACE
-f566b76ee6f105b05e59ac8983566771 *NEWS
+33a2c2700df448bc372bb283bf469bcd *NEWS
 a1723197d80da3e0d20a84f2f450260f *R/bell.R
 b050aadcf7631d309dd070672df289a5 *R/confidence.R
 4b83d44b339e04be5e2f530d8dcf20c8 *R/dlso.R
@@ -27,8 +27,8 @@ ba63bc47dcca1a8c03efbf7042de050a *man/psm.Rd
 659190ab0a1ce1ecfac0484a56a8043a *man/salso.Rd
 7f3de422268c174ff2a1b0bdbeaf039e *src/Makevars
 ace1abfa7f1062671d87d2fc5d0fb488 *src/Makevars.win
-7b8f21ae6cd4b6de5d780d3dfe69991a *src/rustlib/Cargo.lock
-b5af00996995a09748ee9157958e230c *src/rustlib/Cargo.toml
+8e1aba69ef9038c9e6c44f323a9a76d7 *src/rustlib/Cargo.lock
+599d59858a31743b858d3f7de462aaf8 *src/rustlib/Cargo.toml
 649049968bf6d0623ed5716c90bb7d88 *src/rustlib/dahl-bellnumber.h
 4b518e4ce1a049cbf1cf6e491e35c8dc *src/rustlib/dahl-partition.h
 7cee9bf3f4a0b1ccd28b3ba28be6e464 *src/rustlib/dahl-salso.h
