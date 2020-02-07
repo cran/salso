@@ -17,7 +17,8 @@
 #'   represents a clustering of \code{n} items using cluster labels. For
 #'   clustering \code{b}, items \code{i} and \code{j} are in the same cluster if
 #'   \code{x[b,i] == x[b,j]}.
-#' @param parallel Should the search use all CPU cores?
+#' @param parallel Should the search use all CPU cores?  (Currently ignored
+#'   since parallelization is not implemented.)
 #'
 #' @return A list of the following elements: \describe{ \item{estimate}{An
 #'   integer vector giving a partition encoded using cluster labels.}
@@ -53,9 +54,9 @@
 #' 559-626.
 #'
 #' @examples
-#' dlso(draws=iris.clusterings, parallel=FALSE)
+#' dlso(draws=iris.clusterings)
 #'
-dlso <- function(psm, loss=c("VI.lb","binder")[1], draws, parallel=TRUE) {
+dlso <- function(psm, loss=c("VI.lb","binder")[1], draws, parallel=FALSE) {
   if ( missing(psm) ) psm <- salso::psm(draws)
   f <- if ( loss == "VI.lb" ) VI.lb
   else if ( loss == "binder" ) binder
