@@ -2,117 +2,105 @@
 % Please edit documentation in R/salso.R
 \name{salso}
 \alias{salso}
-\title{Sequentially-Allocated Latent Structure Optimization}
+\title{SALSO Greedy Search}
 \usage{
 salso(
-  psm,
-  loss = c("VI.lb", "binder")[1],
+  x,
+  loss = VI(),
   maxSize = 0,
-  batchSize = 100,
-  seconds = Inf,
-  maxScans = 10,
-  probExplorationProbAtZero = 0.5,
-  probExplorationShape = 0.5,
-  probExplorationRate = 50,
-  parallel = TRUE
+  nRuns = 16,
+  maxZealousAttempts = 10,
+  probSequentialAllocation = 0.5,
+  nCores = 0,
+  ...
 )
 }
 \arguments{
-\item{psm}{A pairwise similarity matrix, i.e., \code{n}-by-\code{n} symmetric
-matrix whose \code{(i,j)} element gives the (estimated) probability that
-items \code{i} and \code{j} are in the same subset (i.e., cluster) of a
-partition (i.e., clustering).}
+\item{x}{A \eqn{B}-by-\eqn{n} matrix, where each of the \eqn{B} rows
+represents a clustering of \eqn{n} items using cluster labels. For the
+\eqn{b}th clustering, items \eqn{i} and \eqn{j} are in the same cluster if
+\code{x[b,i] == x[b,j]}.}
 
-\item{loss}{Either \code{"VI.lb"} or \code{"binder"}, to indicate the desired
-loss function.}
+\item{loss}{The loss function to use, as indicated by \code{"binder"},
+\code{"omARI"}, \code{"VI"}, \code{"NVI"}, \code{"ID"}, \code{"NID"}, or
+the result of calling a function with these names. Also supported are
+\code{"binder.psm"}, \code{"VI.lb"}, \code{"omARI.approx"}, or the result
+of calling a function with these names, in which case \code{x} above can
+optionally be a pairwise similarity matrix, i.e., \eqn{n}-by-\eqn{n}
+symmetric matrix whose \eqn{(i,j)} element gives the (estimated)
+probability that items \eqn{i} and \eqn{j} are in the same subset (i.e.,
+cluster) of a partition (i.e., clustering). The loss functions
+\code{"binder.psm"}, \code{"VI.lb"}, and \code{"omARI.approx"} are
+generally not recommended and the current implementation requires that
+\code{maxZealousAttempts = 0} and \code{probSequentialAllocation = 1.0}.}
 
-\item{maxSize}{The maximum number of subsets (i.e, clusters).  The
-optimization is constrained to produce solutions whose number of subsets is
-no more than the supplied value. If zero, the size is not constrained.}
+\item{maxSize}{The maximum number of clusters that can be considered by the
+optimization algorithm, which has important implications for the
+interpretability of the resulting clustering and can greatly influence the
+RAM needed for the optimization algorithm. If the supplied value is zero
+and \code{x} is a matrix of clusterings, the optimization is constrained by
+the maximum number of clusters among the clusterings in \code{x}. If the
+supplied value is zero and \code{x} is a pairwise similarity matrix, there
+is no constraint.}
 
-\item{batchSize}{The number of permutations to consider per batch (although
-the actual number of permutations per batch is a multiple of the number of
-cores when \code{parallel=TRUE}). Batches are sequentially performed until
-the most recent batch does not lead to a better result. Therefore, at least
-two batches are performed (unless the \code{seconds} threshold is
-exceeded.)}
+\item{nRuns}{The number of runs to try, although the actual number may differ
+for the following reasons: 1. The actual number is a multiple of the number
+of cores specified by the \code{nCores} argument, and 2. The search is
+curtailed when the \code{seconds} threshold is exceeded.}
 
-\item{seconds}{A time threshold in seconds after which the function will be
-curtailed (with a warning) instead of performing another batch of
-permutations. Note that the function could take considerably longer because
-the threshold is only checked after each batch is completed.}
+\item{maxZealousAttempts}{The maximum number of attempts for zealous updates,
+in which entire clusters are destroyed and items are sequentially
+reallocated. While zealous updates may be helpful in optimization, they
+also take more CPU time which might be better used trying additional runs.}
 
-\item{maxScans}{The maximum number of reallocation scans after the initial
-allocation. The actual number of scans may be less than \code{maxScans}
-since the method stops if the result does not change between scans.}
+\item{probSequentialAllocation}{For the initial allocation, the probability
+of sequential allocation instead of using \code{sample(1:K, ncol(x),
+TRUE)}, where \code{K} is set according to the \code{maxSize} argument.}
 
-\item{probExplorationProbAtZero}{The probability of the point mass at zero
-for the spike-and-slab distribution of the probability of exploration, i.e.
-the probability of picking the second best micro-optimization (instead of
-the best).  This probability is randomly sampled for (and constant within)
-each permutation.}
+\item{nCores}{The number of CPU cores to use, i.e., the number of
+simultaneous runs at any given time. A value of zero indicates to use all
+cores on the system.}
 
-\item{probExplorationShape}{The shape of the gamma distribution for the slab
-in the spike-and-slab distribution of the probability of exploration.}
-
-\item{probExplorationRate}{The rate of the gamma distribution for the slab in
-the spike-and-slab distribution of the probability of exploration.}
-
-\item{parallel}{Should the search use all CPU cores?}
+\item{...}{Extra arguments not intended for the end user, including: 1.
+\code{seconds}: Instead of performing all the requested number of runs,
+curtail the search after the specified expected number of seconds. Note
+that the function will finish earlier if all the requested runs are
+completed. The specified seconds does not account for the overhead involved
+in starting the search and returning results. 2. \code{maxScans} The
+maximum number of full reallocation scans. The actual number of scans may
+be less than \code{maxScans} since the method stops if the result does not
+change between scans, and 3. \code{probSingletonsInitialization}: When
+doing a sequential allocation to obtain the initial allocation, the
+probability of placing the first \code{maxSize} randomly-selected items in
+singletons subsets.}
 }
 \value{
-A list of the following elements: \describe{ \item{estimate}{An
-  integer vector giving a partition encoded using cluster labels.}
-  \item{loss}{A character vector equal to the \code{loss} argument.}
-  \item{expectedLoss}{A numeric vector of length one giving the expected
-  loss.} \item{nScans}{An integer vector giving the number of scans used to
-  arrive at the supplied estimate.} \item{probExploration}{The probability of
-  picking the second best micro-optimization (instead of the best) for the
-  permutation yielding the supplied estimate.} \item{nPermutations}{An
-  integer giving the number of permutations actually performed.}
-  \item{batchSize}{An integer giving the number of permutations per batch.}
-  \item{curtailed}{A logical indicating whether the search was cut short
-  because the time exceeded the threshold.}}
+An integer vector giving the estimated partition, encoded using
+  cluster labels.
 }
 \description{
-This function provides a point estimate for a partition distribution using
-the sequentially-allocated latent structure optimization (SALSO) method. The
-method seeks to minimize the expectation of the Binder loss or the lower
-bound of the expectation of the variation of information loss. The SALSO
-method was presented at the workshop "Bayesian Nonparametric Inference:
-Dependence Structures and their Applications" in Oaxaca, Mexico on December
-6, 2017. See
+This function provides a partition to summarize a partition distribution
+using the SALSO greedy search method. The implementation currently supports
+the minimization of several partition estimation criteria. For details on
+these criteria, see \code{\link{partition.loss}}.
+}
+\details{
+The initial version of the SALSO method was presented at the workshop
+"Bayesian Nonparametric Inference: Dependence Structures and their
+Applications" in Oaxaca, Mexico on December 6, 2017. See
 <https://www.birs.ca/events/2017/5-day-workshops/17w5060/schedule>.
 }
 \examples{
-# Use 'parallel=FALSE' per CRAN rules for examples but, in practice, omit this.
-probs <- psm(iris.clusterings, parallel=FALSE)
-salso(probs, parallel=FALSE)
+# For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
 
-}
-\references{
-D. A. Binder (1978), Bayesian cluster analysis, \emph{Biometrika} \bold{65},
-31-38.
+draws <- iris.clusterings
+salso(draws, loss=VI(), nRuns=1, nCores=1)
+salso(draws, loss=VI(a=0.7), nRuns=1, nCores=1)
+salso(draws, loss=binder(), nRuns=1, nCores=1)
+salso(iris.clusterings, binder(a=list(nClusters=3, upper=5)), nRuns=4, nCores=1)
 
-D. B. Dahl (2006), Model-Based Clustering for Expression Data via a Dirichlet
-Process Mixture Model, in \emph{Bayesian Inference for Gene Expression and
-Proteomics}, Kim-Anh Do, Peter Müller, Marina Vannucci (Eds.), Cambridge
-University Press.
-
-J. W. Lau and P. J. Green (2007), Bayesian model based clustering procedures,
-\emph{Journal of Computational and Graphical Statistics} \bold{16}, 526-558.
-D. B. Dahl, M. A. Newton (2007), Multiple Hypothesis Testing by Clustering
-Treatment Effects, \emph{Journal of the American Statistical Association},
-\bold{102}, 517-526.
-
-A. Fritsch and K. Ickstadt (2009), An improved criterion for clustering
-based on the posterior similarity matrix, \emph{Bayesian Analysis},
-\bold{4}, 367-391.
-
-S. Wade and Z. Ghahramani (2018), Bayesian cluster analysis: Point
-estimation and credible balls. \emph{Bayesian Analysis}, \bold{13:2},
-559-626.
 }
 \seealso{
-\code{\link{psm}}, \code{\link{confidence}}, \code{\link{dlso}}
+\code{\link{partition.loss}}, \code{\link{psm}},
+  \code{\link{summary.salso.estimate}}, \code{\link{dlso}}
 }

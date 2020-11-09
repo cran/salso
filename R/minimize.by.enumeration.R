@@ -1,12 +1,19 @@
 #' @useDynLib salso .minimize_by_enumeration
 #'
-minimize.by.enumeration <- function(psm, loss=c("VI.lb","binder")[1]) {
-  if ( ! ( isSymmetric(psm) && all(0 <= psm) && all(psm <= 1) && all(diag(psm)==1) ) ) {
-    stop("'psm' should be symmetric with diagonal elements equal to 1 and off-diagonal elements in [0, 1].")
+minimize.by.enumeration <- function(x, loss="VI") {
+  FORCE_INEFFICIENT <- if ( is.character(loss) && grepl("^__", loss) ) {
+    loss <- gsub("^__","",loss)
+    TRUE
+  } else FALSE
+  z <- x2drawspsm(x, loss)
+  if ( ( z$lossStr %in% c("binder.psm","omARI.approx","VI.lb") ) && ! FORCE_INEFFICIENT ) {
+    y <- .Call(.minimize_by_enumeration, z$psm, z$lossCode, z$a)
+    names(y) <- colnames(z$psm)
+  } else {
+    cat("The current implementation is not parallelized nor memory efficient.\n")
+    all <- enumerate.partitions(ncol(x))
+    y <- all[which.min(partition.loss(all, x, loss)),]
+    names(y) <- if ( !is.null(z$draws) ) colnames(z$draws) else colnames(z$psm)
   }
-  if ( ( length(loss) != 1 ) || ! ( loss %in% c("VI.lb","binder") ) ) stop("'loss' is not recognized.")
-  useVIlb <- loss == "VI.lb"
-  y <- .Call(.minimize_by_enumeration, nrow(psm), psm, useVIlb)
-  names(y) <- colnames(psm)
   y
 }

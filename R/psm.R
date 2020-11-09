@@ -1,31 +1,42 @@
-#' Compute the Pairwise Similarity Matrix
+#' Compute an Adjacency or Pairwise Similarity Matrix
 #'
-#' This function computes the \code{n}-by-\code{n} matrix whose \code{(i,j)}
-#' element gives the (estimated) probability that items \code{i} and \code{j}
-#' are in the same subset (i.e., cluster).
+#' If only one sample is provided, this function computes an adjacency matrix,
+#' i.e., a binary matrix whose \eqn{(i,j)} element is one if and only if
+#' elements \eqn{i} and \eqn{j} in the partition have the same cluster label. If
+#' multiple samples are provided (as rows of the \code{x} matrix), this function
+#' computes the \eqn{n}-by-\eqn{n} matrix whose \eqn{(i,j)} element gives the
+#' relative frequency (i.e., estimated probability) that items \eqn{i} and
+#' \eqn{j} are in the same subset (i.e., cluster).  This is the mean of the
+#' adjacency matrices of the provided samples.
 #'
-#' @param x A \code{B}-by-\code{n} matrix, where each of the \code{B} rows
-#'   represents a clustering of \code{n} items using cluster labels. For
-#'   clustering \code{b}, items \code{i} and \code{j} are in the same cluster if
+#' @param x A \eqn{B}-by-\eqn{n} matrix, where each of the \eqn{B} rows
+#'   represents a clustering of \eqn{n} items using cluster labels. For
+#'   clustering \eqn{b}, items \eqn{i} and \eqn{j} are in the same cluster if
 #'   \code{x[b,i] == x[b,j]}.
-#' @param parallel Should the computation use all CPU cores?
+#' @param nCores The number of CPU cores to use. A value of zero indicates to
+#'   use all cores on the system.
 #'
-#' @return A \code{n}-by-\code{n} symmetric matrix whose \code{(i,j)} element
-#'   gives the estimated expected number of times that items \code{i} and
-#'   \code{j} are in the same subset (i.e., cluster or feature) based on the
-#'   frequencies from the supplied clusterings or feature allocations.
+#' @return A \eqn{n}-by-\eqn{n} symmetric matrix whose \eqn{(i,j)} element gives
+#'   the relative frequency that that items \eqn{i} and \eqn{j} are in the same
+#'   subset (i.e., cluster).
 #'
 #' @export
 #' @useDynLib salso .psm
 #' @examples
+#' partition <- iris.clusterings[1,]
+#' psm(partition)
+#'
 #' dim(iris.clusterings)
-#' # Use 'parallel=FALSE' per CRAN rules for examples but, in practice, omit this.
-#' probs <- psm(iris.clusterings, parallel=FALSE)
+#' # For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
+#' probs <- psm(iris.clusterings, nCores=1)
 #' dim(probs)
 #' probs[1:6, 1:6]
 #'
-psm <- function(x, parallel=TRUE) {
-  y <- .Call(.psm, x, parallel)
+psm <- function(x, nCores=0) {
+  if ( nCores < 0.0 ) stop("'nCores' may not be negative.")
+  if ( nCores > .Machine$integer.max ) nCores <- .Machine$integer.max
+  if ( ! is.matrix(x) ) x <- t(x)
+  y <- .Call(.psm, x, nCores)
   dim(y) <- rep(ncol(x), 2)
   dimnames(y) <- list(colnames(x), colnames(x))
   y

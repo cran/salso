@@ -2,33 +2,41 @@
 % Please edit documentation in R/psm.R
 \name{psm}
 \alias{psm}
-\title{Compute the Pairwise Similarity Matrix}
+\title{Compute an Adjacency or Pairwise Similarity Matrix}
 \usage{
-psm(x, parallel = TRUE)
+psm(x, nCores = 0)
 }
 \arguments{
-\item{x}{A \code{B}-by-\code{n} matrix, where each of the \code{B} rows
-represents a clustering of \code{n} items using cluster labels. For
-clustering \code{b}, items \code{i} and \code{j} are in the same cluster if
+\item{x}{A \eqn{B}-by-\eqn{n} matrix, where each of the \eqn{B} rows
+represents a clustering of \eqn{n} items using cluster labels. For
+clustering \eqn{b}, items \eqn{i} and \eqn{j} are in the same cluster if
 \code{x[b,i] == x[b,j]}.}
 
-\item{parallel}{Should the computation use all CPU cores?}
+\item{nCores}{The number of CPU cores to use. A value of zero indicates to
+use all cores on the system.}
 }
 \value{
-A \code{n}-by-\code{n} symmetric matrix whose \code{(i,j)} element
-  gives the estimated expected number of times that items \code{i} and
-  \code{j} are in the same subset (i.e., cluster or feature) based on the
-  frequencies from the supplied clusterings or feature allocations.
+A \eqn{n}-by-\eqn{n} symmetric matrix whose \eqn{(i,j)} element gives
+  the relative frequency that that items \eqn{i} and \eqn{j} are in the same
+  subset (i.e., cluster).
 }
 \description{
-This function computes the \code{n}-by-\code{n} matrix whose \code{(i,j)}
-element gives the (estimated) probability that items \code{i} and \code{j}
-are in the same subset (i.e., cluster).
+If only one sample is provided, this function computes an adjacency matrix,
+i.e., a binary matrix whose \eqn{(i,j)} element is one if and only if
+elements \eqn{i} and \eqn{j} in the partition have the same cluster label. If
+multiple samples are provided (as rows of the \code{x} matrix), this function
+computes the \eqn{n}-by-\eqn{n} matrix whose \eqn{(i,j)} element gives the
+relative frequency (i.e., estimated probability) that items \eqn{i} and
+\eqn{j} are in the same subset (i.e., cluster).  This is the mean of the
+adjacency matrices of the provided samples.
 }
 \examples{
+partition <- iris.clusterings[1,]
+psm(partition)
+
 dim(iris.clusterings)
-# Use 'parallel=FALSE' per CRAN rules for examples but, in practice, omit this.
-probs <- psm(iris.clusterings, parallel=FALSE)
+# For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
+probs <- psm(iris.clusterings, nCores=1)
 dim(probs)
 probs[1:6, 1:6]
 
