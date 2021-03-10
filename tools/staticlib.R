@@ -1,57 +1,25 @@
-FORCE_DOWNLOAD <- as.logical(Sys.getenv("RUSTLIB_FORCE_DOWNLOAD",unset="FALSE"))
+lib_dir_template <- commandArgs(TRUE)[1]
+statlib          <- commandArgs(TRUE)[2]
+target <- cargo::target()
 
-args <- commandArgs(TRUE)
-target <- if ( length(args) > 0 ) args[1] else NULL
-cat("RUSTLIB_FORCE_DOWNLOAD=",FORCE_DOWNLOAD,"\n",sep="")
+cat("Target is: ", target, "\n", sep="")
 
-requiredCargoVersion <- "1.31.0"
-if ( ( ! FORCE_DOWNLOAD ) && ( Sys.which("cargo") != "" ) ) {
-  installedCargoVersion <- gsub("cargo ([^ ]+).*", "\\1", system2("cargo","--version",stdout=TRUE))
-  cat(sprintf("\nCargo %s is found", installedCargoVersion))
-  if ( compareVersion(installedCargoVersion, requiredCargoVersion) < 0 ) {
-    cat(sprintf(" but Cargo (>= %s) is required for compilation.\n\n", requiredCargoVersion))
-  } else {
-    cat("; compiling static library.\n\n")
-    targetArg <- if ( is.null(target) ) NULL else paste0("--target=",target)
-    status <- system2("cargo",c("build",targetArg,"--release","--manifest-path=rustlib/Cargo.toml"))
-    cat("\n")
-    quit(status=status)
-  }
+if ( cargo::is_available("1.42") ) {
+
+  cargo::run(c("build", "--jobs", "1", "--target", target, "--release", "--manifest-path", "rustlib/Cargo.toml"))
+
+} else {
+
+  cargo:::download_static_library(target,
+    mkURL1=function(pkgName,pkgVersion,osName,target) {
+      sprintf("https://dbdahl.github.io/rrepository/staticlib/%s_%s/%s/%s.tar.gz",pkgName,pkgVersion,osName,target)
+    },
+    mkURL2=function(pkgName,pkgVersion,osName,target) {
+      sprintf("https://dahl.byu.edu/rrepository/staticlib/%s_%s/%s/%s.tar.gz",pkgName,pkgVersion,osName,target)
+    }
+  )
+
 }
 
-osType <- function() {
-  info <- Sys.info()
-  sysname <- info["sysname"]
-  if ( ( ! grepl("^x86", info["machine"]) ) || ( ! ( sysname %in% c("Windows","Darwin","Linux") ) ) ) sprintf("%s-%s",info["sysname"],info["machine"])
-  else if ( sysname == "Windows" ) "windows"
-  else if ( sysname == "Darwin" ) "macosx"
-  else if ( sysname == "Linux" ) "linux"
-  else sysname
-}
-osType <- osType()
-
-if ( ! ( osType %in% c("windows","macosx","linux") ) ) {
-  cat(sprintf("\nCargo (>= %s) is not installed.\n\n",requiredCargoVersion))
-  cat(paste(readLines("../INSTALL"),collapse="\n"))
-  cat("\n")
-  quit(status=1)
-}
-
-cat(sprintf("\nDownloading static library for %s.\n\n",osType))
-
-desc <- read.dcf("../DESCRIPTION")
-pkgName    <- as.character(desc[,"Package"])
-pkgVersion <- as.character(desc[,"Version"])
-
-download.file(sprintf("https://dbdahl.github.io/rpackages/lib/%s/%s/%s.tar.gz",osType,pkgName,pkgVersion), "staticlib.tar.gz", quiet=TRUE)
-untar("staticlib.tar.gz", exdir="..")
-unlink("staticlib.tar.gz")
-
-if ( osType == "windows" ) {
-  destDir <- sprintf("rustlib/target/%s/release", target)
-  headDir <- if ( substr(target,1,3) == "x86" ) "x64" else "i386"
-  dir.create(destDir, recursive=TRUE, showWarnings=FALSE)
-  invisible(file.rename(sprintf("../src-%s/%s/librustlib.a", headDir, destDir),
-                        sprintf(          "%s/librustlib.a",          destDir)))
-}
-
+dir.create(dirname(statlib), showWarnings=FALSE, recursive=TRUE)
+file.copy(file.path(gsub("___",target,lib_dir_template),basename(statlib)), statlib)
