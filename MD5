@@ -1,8 +1,8 @@
-c9da56b37499189b5993ca4b440c090d *DESCRIPTION
-d8b4942717c701bd1abccabb8c098ed1 *INSTALL
+2b14f3b2db634235e187a737205c633c *DESCRIPTION
+3facdc115f1f0f71164ae9576e6e4cea *INSTALL
 5a7af85e27b47f8bd0ed4fd0892037ab *LICENSE
 a464a1ac904ea7f5e5a8a3817eccca6a *NAMESPACE
-dbf0fea9e2ef320a2b4dc4de27e06645 *NEWS
+67b97d3a0a53662d2517284ba698158d *NEWS
 4171f5b9ba0eb5a463f9345aadb5dd03 *R/bell.R
 62df97bba48170b24582b88b1ff7cc03 *R/confidence.R
 009484b721b3226d251dc740e85d6625 *R/dlso.R
@@ -28,7 +28,7 @@ e53c7a72a0316f127ab075d7c88d40e8 *man/partition.loss.Rd
 646b374c37e3c4ecf44a255b66d230aa *man/psm.Rd
 0c799cc57c28b0b35f4a00c5e3fc3a1f *man/salso.Rd
 ffb04d1e4051a13927c66f9c52d9293c *man/summary.salso.estimate.Rd
-769bb42e1a33264e06eb6a93492cf6c1 *src/Makevars
+9ce42ffca3b844a165911d1fe9b57b5a *src/Makevars
 240f46f0fc3fac2a364f7fd73d806e25 *src/Makevars.win
 7a00dae84cbab80bb4211f405ec923e8 *src/rustlib/Cargo.lock
 a28d9811fe241a38190996febb672aed *src/rustlib/Cargo.toml
@@ -37,4 +37,4 @@ a28d9811fe241a38190996febb672aed *src/rustlib/Cargo.toml
 5320431550402a0d6377bcc35dc4200a *src/rustlib/dahl-salso.h
 424c96e4dfe5ce7cff3c85d5cd93473b *src/rustlib/src/lib.rs
 efec6c608ad5260e31857629d10f50b8 *src/wrapper.c
-8b5c58bdda1d7bf044fcae13c9715129 *tools/staticlib.R
+3597a3f617b219274e0f85ccf296a518 *tools/staticlib.R
