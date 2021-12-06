@@ -94,12 +94,13 @@ Applications" in Oaxaca, Mexico on December 6, 2017. See
 }
 \examples{
 # For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
-
+data(iris.clusterings)
 draws <- iris.clusterings
 salso(draws, loss=VI(), nRuns=1, nCores=1)
 salso(draws, loss=VI(a=0.7), nRuns=1, nCores=1)
 salso(draws, loss=binder(), nRuns=1, nCores=1)
-salso(iris.clusterings, binder(a=list(nClusters=3, upper=5)), nRuns=4, nCores=1)
+salso(iris.clusterings, binder(a=NULL), nRuns=4, nCores=1)
+salso(iris.clusterings, binder(a=list(nClusters=3)), nRuns=4, nCores=1)
 
 }
 \references{

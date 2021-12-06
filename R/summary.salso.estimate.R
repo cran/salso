@@ -29,6 +29,7 @@
 #' @export
 #' @examples
 #' # For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
+#' data(iris.clusterings)
 #' draws <- iris.clusterings
 #' est <- salso(draws, nCores=1)
 #' summ <- summary(est)
@@ -56,7 +57,7 @@ summary.salso.estimate <- function(object, alternative, orderingMethod=1, ...) {
   score <- sapply(one2n, function(i) {
     subset <- ( estimate == estimate[i] ) & ( one2n != i )
     xi <- if ( isPSM ) x[subset, subset, drop=FALSE] else x[, subset, drop=FALSE]
-    partition.loss(rep(1,ncol(xi)), xi, loss)
+    partition.loss(xi, rep(1,ncol(xi)), loss)
   })
   score[is.na(score)] <- 0
   # meanPS
@@ -91,7 +92,14 @@ summary.salso.estimate <- function(object, alternative, orderingMethod=1, ...) {
   m <- matrix(0.0, nrow=nClusters, ncol=nClusters)
   for ( i in seq_len(nClusters) ) {
     for ( j in seq_len(i) ) {
-      m[i,j] <- mean(psm[estimate==i, estimate==j])
+      m[i,j] <- if ( i == j ) local({
+        y <- estimate == i
+        x <- psm[y, y, drop=FALSE]
+        diag(x) <- 0
+        sum(x) / ( length(x) - sum(y) )
+      }) else {
+        mean(psm[estimate==i, estimate==j])
+      }
     }
   }
   ut <- upper.tri(m)

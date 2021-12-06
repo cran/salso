@@ -294,8 +294,6 @@ impl Rval {
 
     /// Duplicate an object.
     ///
-    /// When assignments are done in R such as
-    ///
     /// Since multiple symbols may be bound to the same object, if the usual R semantics are to
     /// apply, any code which alters one of them needs to make a copy before modifying the copy.
     /// This method is commonly called on arguments to `.Call` before modifying them.
@@ -668,6 +666,18 @@ impl Rval {
         match c_str.to_str() {
             Ok(x) => x.to_string(),
             Err(_) => "".to_string(),
+        }
+    }
+
+    /// Coerce the object to storage mode `character` and get the associated `&str` value.
+    ///
+    /// If coercion is not possible (because, for example, no UTF-8 representation exists), `""` is returned.
+    ///
+    pub fn as_str(self) -> &'static str {
+        let c_str = unsafe { CStr::from_ptr(R_CHAR(Rf_asChar(self.0)) as *const c_char) };
+        match c_str.to_str() {
+            Ok(x) => x,
+            Err(_) => "",
         }
     }
 

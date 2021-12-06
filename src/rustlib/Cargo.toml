@@ -2,6 +2,8 @@
 name = "rustlib"
 version = "0.1.0"
 edition = "2018"
+license = "MIT OR Apache-2.0"
+publish = false
 
 [lib]
 crate-type = ["staticlib"]
@@ -19,7 +21,7 @@ dahl-partition = "0.5.3"
 dahl-bellnumber = "0.1.1"
 # dahl-bellnumber = { path="/home/dahl/docs/devel/rust-dahl-bellnumber" }
 
-dahl-salso = "0.6.0"
+dahl-salso = "0.6.6"
 # dahl-salso = { git="https://dahl-git.byu.edu/dahl/rust-dahl-salso.git" }
 # dahl-salso = { path="/home/dahl/docs/devel/rust-dahl-salso" }
 
