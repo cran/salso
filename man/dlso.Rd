@@ -28,7 +28,7 @@ cluster) of a partition (i.e., clustering).}
 }
 \value{
 An integer vector giving the estimated partition, encoded using
-  cluster labels.
+cluster labels.
 }
 \description{
 This function provides a partition to summarize a partition distribution
@@ -41,11 +41,15 @@ of several partition estimation criteria. For details on these criteria, see
 }
 \examples{
 data(iris.clusterings)
+# R_CARGO \dontrun{
+# R_CARGO # Example disabled since Cargo was not found when installing from source package.
+# R_CARGO # You can still run the example if you install Cargo. Hint: cargo::install().
 dlso(iris.clusterings, loss=VI())
 dlso(iris.clusterings, loss=binder())
 
 # Compute expected loss using all draws, but pick the best among the first 10.
 dlso(iris.clusterings, loss=VI(), estimate=iris.clusterings[1:10,])
+# R_CARGO }
 
 }
 \references{
@@ -56,5 +60,5 @@ University Press.
 }
 \seealso{
 \code{\link{partition.loss}}, \code{\link{psm}},
-  \code{\link{summary.salso.estimate}}, \code{\link{salso}}
+\code{\link{summary.salso.estimate}}, \code{\link{salso}}
 }

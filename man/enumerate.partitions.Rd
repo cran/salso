@@ -11,7 +11,7 @@ enumerate.partitions(nItems)
 }
 \value{
 A matrix of integers, where each row is a partition encoded as a
-  vector of cluster labels.
+vector of cluster labels.
 }
 \description{
 This function produces a matrix whose rows provide all possible partitions of
@@ -20,6 +20,10 @@ labels, where two items are in the same subset (i.e., cluster) if their
 labels are equal.
 }
 \examples{
+# R_CARGO \dontrun{
+# R_CARGO # Example disabled since Cargo was not found when installing from source package.
+# R_CARGO # You can still run the example if you install Cargo. Hint: cargo::install().
 enumerate.partitions(5)
+# R_CARGO }
 
 }

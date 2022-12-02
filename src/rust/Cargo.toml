@@ -1,0 +1,19 @@
+[package]
+name = "rust"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+roxido = { path="roxido" }
+rand = "0.8.5"
+rand_pcg = "0.3.1"
+num-traits = "0.2.15"
+dahl-partition = "0.5.3"
+dahl-bellnumber = "0.1.1"
+dahl-salso = "0.6.6"
+

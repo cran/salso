@@ -18,8 +18,8 @@ cores on the system.}
 }
 \value{
 A \eqn{n}-by-\eqn{n} symmetric matrix whose \eqn{(i,j)} element gives
-  the relative frequency that that items \eqn{i} and \eqn{j} are in the same
-  subset (i.e., cluster).
+the relative frequency that that items \eqn{i} and \eqn{j} are in the same
+subset (i.e., cluster).
 }
 \description{
 If only one sample is provided, this function computes an adjacency matrix,
@@ -35,11 +35,19 @@ adjacency matrices of the provided samples.
 # For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
 data(iris.clusterings)
 partition <- iris.clusterings[1,]
+# R_CARGO \dontrun{
+# R_CARGO # Example disabled since Cargo was not found when installing from source package.
+# R_CARGO # You can still run the example if you install Cargo. Hint: cargo::install().
 psm(partition, nCores=1)
+# R_CARGO }
 
 dim(iris.clusterings)
+# R_CARGO \dontrun{
+# R_CARGO # Example disabled since Cargo was not found when installing from source package.
+# R_CARGO # You can still run the example if you install Cargo. Hint: cargo::install().
 probs <- psm(iris.clusterings, nCores=1)
 dim(probs)
 probs[1:6, 1:6]
+# R_CARGO }
 
 }
