@@ -1,10 +1,5 @@
 ---
-Trying to find a suitable Cargo using the PATH environment variable.
-Method bypassed by R_CARGO_RUN environment variable.
-Trying to find a suitable Cargo using the conventional location.
-Method bypassed by R_CARGO_RUN environment variable.
 Trying to find a suitable Cargo using tools::R_user_dir('cargo', 'cache').
-Method bypassed by R_CARGO_RUN environment variable.
-No suitable version of Cargo was found.
-One solution is to run 'cargo::install()'.
+Trying to use Cargo at: /home/dahl/.cache/R/cargo/cargo/bin/cargo
+Cargo version '1.65.0' is available, which satisfies the need for '1.56'.
 ---
