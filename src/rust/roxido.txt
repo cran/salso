@@ -5,3 +5,4 @@ expected_loss, partitions, draws, psm, loss, a
 psm, partitions, n_cores
 minimize_by_enumeration, psm, loss, a
 minimize_by_salso, draws, psm, loss, a, max_n_clusters, n_runs, seconds, max_scans, max_zealous_attempts, prob_sequential_allocation, prob_singletons_initialization, n_cores
+chips, partitions, threshold, n_runs, intermediate_results, all_candidates, n_cores

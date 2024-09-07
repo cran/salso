@@ -1,5 +1,7 @@
 ---
 Trying to find a suitable Cargo using tools::R_user_dir('cargo', 'cache').
 Trying to use Cargo at: /home/dahl/.cache/R/cargo/cargo/bin/cargo
-Cargo version '1.71.0' is available, which satisfies the need for '1.65'.
+'rustc --version' reports: rustc 1.79.0 (129f3b996 2024-06-10)
+'cargo --version' reports: cargo 1.79.0 (ffa9cf99a 2024-06-03)
+Version '1.79.0' is available, which satisfies the need for '1.66.1'.
 ---

@@ -21,6 +21,7 @@
 #' @param showLabels Should the cluster labels be shown in the plot when
 #'   \code{type="heatmap"}?
 #' @param showIDs Should the ID of the items be shown in the plot?
+#' @param cexAdjustment Scalar multiplier for adjust text size.
 #' @param ... Arguments to be passed to methods, such as graphical parameters
 #'   (see \code{\link{par}}).
 #'
@@ -30,16 +31,12 @@
 #' # For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
 #' data(iris.clusterings)
 #' draws <- iris.clusterings
-#' # R_CARGO \dontrun{
-#' # R_CARGO # Example disabled since Cargo was not found when installing from source package.
-#' # R_CARGO # You can still run the example if you install Cargo. Hint: cargo::install().
 #' est <- salso(draws, nCores=1)
 #' summ <- summary(est)
 #' plot(summ, type="heatmap")
 #' plot(summ, type="mds")
 #' plot(summ, type="pairs", data=iris)
 #' plot(summ, type="dendrogram")
-#' # R_CARGO }
 #'
 #' @seealso \code{\link{salso}}, \code{\link{summary.salso.estimate}},
 #'   \code{\link[stats]{cmdscale}}.
@@ -50,7 +47,7 @@
 #'   text legend
 #' @export
 #'
-plot.salso.summary <- function(x, type=c("heatmap","mds","pairs","dendrogram")[1], data=NULL, showLabels=TRUE, showIDs=length(x$estimate)<=50, ...) {
+plot.salso.summary <- function(x, type=c("heatmap","mds","pairs","dendrogram")[1], data=NULL, showLabels=TRUE, showIDs=length(x$estimate)<=50, cexAdjustment=0.7, ...) {
   opar <- NULL
   if ( type == "dendrogram" ) {
     plot(x$dendrogram)
@@ -79,13 +76,13 @@ plot.salso.summary <- function(x, type=c("heatmap","mds","pairs","dendrogram")[1
     abline(v=cuts+0.5,lwd=3)
     abline(h=n-cuts+0.5,lwd=3)
     if ( showLabels ) {
-      text(centers+0.5,n-centers+0.5,labels,cex=0.8*cexscale*sizes)
+      text(centers+0.5,n-centers+0.5,labels,cex=cexAdjustment*cexscale*sizes)
     }
     if ( showIDs ) {
       axisLabels <- if ( is.null(names(estimate)) ) o
       else names(estimate[o])
-      axis(4,1:length(estimate),rev(axisLabels),las=2,cex.axis=0.8*cexscale)
-      axis(1,1:length(estimate),axisLabels,las=2,cex.axis=0.8*cexscale)
+      axis(4,1:length(estimate),rev(axisLabels),las=2,cex.axis=cexAdjustment*cexscale)
+      axis(1,1:length(estimate),axisLabels,las=2,cex.axis=cexAdjustment*cexscale)
       nn <- length(colors)
       bx <- par("usr")
       bx.cx <- c(bx[1] - 1.6 * (bx[2] - bx[1]) / 50, bx[1] - 0.3 * (bx[2] - bx[1]) / 50)

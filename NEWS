@@ -1,3 +1,8 @@
+0.3.41 (2024-09-06)
+  * Added cexAdjustment argument to plot() function for a partition estimate.
+  * Update to track latest roxido framework.
+  * Update for CRAN compliance in reporting rustc version during installation.
+
 0.3.35 (2023-07-17)
   * Adjust "SystemRequirements" as per
     [Using Rust in CRAN packages](https://cran.r-project.org/web/packages/using_rust.html)

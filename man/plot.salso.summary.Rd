@@ -11,6 +11,7 @@ Partition Estimation}
   data = NULL,
   showLabels = TRUE,
   showIDs = length(x$estimate) <= 50,
+  cexAdjustment = 0.7,
   ...
 )
 }
@@ -28,6 +29,8 @@ is required when \code{type='pairs'} and ignored otherwise.}
 \code{type="heatmap"}?}
 
 \item{showIDs}{Should the ID of the items be shown in the plot?}
+
+\item{cexAdjustment}{Scalar multiplier for adjust text size.}
 
 \item{...}{Arguments to be passed to methods, such as graphical parameters
 (see \code{\link{par}}).}
@@ -51,16 +54,12 @@ increase in the expectation of the posterior loss is minimized.
 # For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
 data(iris.clusterings)
 draws <- iris.clusterings
-# R_CARGO \dontrun{
-# R_CARGO # Example disabled since Cargo was not found when installing from source package.
-# R_CARGO # You can still run the example if you install Cargo. Hint: cargo::install().
 est <- salso(draws, nCores=1)
 summ <- summary(est)
 plot(summ, type="heatmap")
 plot(summ, type="mds")
 plot(summ, type="pairs", data=iris)
 plot(summ, type="dendrogram")
-# R_CARGO }
 
 }
 \seealso{
