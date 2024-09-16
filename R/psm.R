@@ -16,11 +16,13 @@
 #'   subset (i.e., cluster).
 #'
 #' @export
+#' @importFrom utils head
 #' @examples
 #' # For examples, use 'nCores=1' per CRAN rules, but in practice omit this.
 #' data(iris.clusterings)
 #' partition <- iris.clusterings[1,]
-#' psm(partition, nCores=1)
+#' psmatrix <- psm(partition, nCores=1)
+#' psmatrix[1:6, 1:6]
 #'
 #' dim(iris.clusterings)
 #' probs <- psm(iris.clusterings, nCores=1)
