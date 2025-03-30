@@ -1,7 +1,8 @@
 # Automatically regenerated. Do not edit.
 
 # .Call(.bell, n_items)
-# .Call(.chips, partitions, threshold, n_runs, intermediate_results, all_candidates, n_cores)
+# .Call(.canonicalize_cluster_labels, x)
+# .Call(.chips, partitions, threshold, n_runs, intermediate_results, all_candidates, and_salso, loss, a, max_n_clusters, initial_partition, n_cores)
 # .Call(.enumerate_partitions, n_items)
 # .Call(.expected_loss, partitions, draws, psm, loss, a)
 # .Call(.lbell, n_items)
