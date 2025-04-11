@@ -1,7 +1,7 @@
 Package: salso
 Type: Package
 Title: Search Algorithms and Loss Functions for Bayesian Clustering
-Version: 0.3.51
+Version: 0.3.53
 Authors@R: c(person(given = "David B.", family = "Dahl", role = c("aut", "cre"), email = "dahl@stat.byu.edu", comment = c(ORCID = "0000-0002-8173-1547")),
     person(given = "Devin J.", family = "Johnson", role = c("aut"), email = "devin.j.johnson7@gmail.com", comment = c(ORCID = "0000-0003-2619-6649")),
     person(given = "Peter", family = "Müller", role = c("aut"), email = "pmueller@math.utexas.edu"),
@@ -29,12 +29,13 @@ License: MIT + file LICENSE | Apache License 2.0
 URL: https://github.com/dbdahl/salso
 BugReports: https://github.com/dbdahl/salso/issues
 Depends: R (>= 4.2.0)
-SystemRequirements: Cargo (Rust's package manager), rustc (>= 1.67.1)
+SystemRequirements: Cargo (Rust's package manager), rustc (>= 1.81.0)
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.3.2
+Config/Roxido/Version: 25.04.10
 NeedsCompilation: yes
-Packaged: 2025-03-30 05:37:11 UTC; dahl
+Packaged: 2025-04-11 03:06:34 UTC; dahl
 Author: David B. Dahl [aut, cre] (<https://orcid.org/0000-0002-8173-1547>),
   Devin J. Johnson [aut] (<https://orcid.org/0000-0003-2619-6649>),
   Peter Müller [aut],
@@ -63,4 +64,4 @@ Author: David B. Dahl [aut, cre] (<https://orcid.org/0000-0002-8173-1547>),
   bluss [ctb] (Rust crates: matrixmultiply, rawpointer)
 Maintainer: David B. Dahl <dahl@stat.byu.edu>
 Repository: CRAN
-Date/Publication: 2025-03-30 06:00:02 UTC
+Date/Publication: 2025-04-11 03:30:02 UTC
