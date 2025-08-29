@@ -3,6 +3,7 @@ arch <- R.version$arch
 
 dcf <- read.dcf("DESCRIPTION")
 
+message("Timestamp: ", format(Sys.time(), tz = "UTC", usetz = TRUE))
 system_requirements <- unname(dcf[, "SystemRequirements"])
 message(sprintf("SystemRequirements: %s", system_requirements))
 
@@ -110,7 +111,18 @@ for (run_counter in 1:2) {
 }
 unlink("roxido.txt")
 
-file.copy("target/release/librust.a", "..", overwrite = TRUE)
+liba <- list.files("target", "librust.a", full.names = TRUE, recursive = TRUE)
+liba <- liba[grepl("(^|/|\\\\)release(/|\\\\)", liba)]
+liba <- if (length(liba) > 0) {
+  file_info <- file.info(liba)
+  file_info <- rownames(file_info)[which(file_info$mtime == max(file_info$mtime))]
+  file_info[which.min(nchar(file_info))]
+} else {
+  message("No matching files found.")
+  stop("Exiting.")
+}
+
+file.copy(liba, "..", overwrite = TRUE)
 if (cran_build) {
   unlink("target", recursive = TRUE, force = TRUE, expand = FALSE)
   unlink("vendor", recursive = TRUE, force = TRUE, expand = FALSE)

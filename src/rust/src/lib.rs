@@ -654,7 +654,10 @@ impl PartialPartitionStorage {
         }
         let result = if compute_auc {
             let n_items_f64 = n_items as f64;
-            let auc: f64 = self.0.iter().map(|x| x.1 / n_items_f64).sum();
+            let auc: f64 = (&self.0[..self.0.len() - 1])
+                .iter()
+                .map(|x| x.1 / n_items_f64)
+                .sum();
             let result = if and_salso {
                 RList::with_names(
                     &[
@@ -662,7 +665,7 @@ impl PartialPartitionStorage {
                         "n_items",
                         "probability",
                         "unallocated",
-                        "auc",
+                        "AUChips",
                         "chips_and_salso_partition",
                     ],
                     pc,
@@ -674,7 +677,7 @@ impl PartialPartitionStorage {
                         "n_items",
                         "probability",
                         "unallocated",
-                        "auc",
+                        "AUChips",
                     ],
                     pc,
                 )
@@ -900,7 +903,7 @@ fn chips(
     } else if intermediate_results {
         let mut storage = PartialPartitionStorage::new();
         let mut n_items_in_subset = 0;
-        while n_items_in_subset < partitions.n_items {
+        while n_items_in_subset <= partitions.n_items {
             let probabilities: Vec<_> = candidates
                 .iter()
                 .map(|candidate| match candidate.0.get(n_items_in_subset) {
