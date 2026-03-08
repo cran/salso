@@ -23,11 +23,13 @@ represents a clustering of \eqn{n} items using cluster labels. For the
 \eqn{b}th clustering, items \eqn{i} and \eqn{j} are in the same cluster if
 \code{x[b, i] == x[b, j]}.}
 
-\item{threshold}{The minimum marginal probability for the subpartition.
+\item{threshold}{The minimum marginal probability for the subpartition, i.e., the gamma parameter.
 Values closer to 1.0 will yield a partition of fewer items and values
 closer to 0.0 will yield a partition of more items.}
 
-\item{nRuns}{The number of runs to try, where the best result is returned.}
+\item{nRuns}{The number of runs to try. When multiple runs produce candidate
+subpartitions, the one allocating the most items is selected; among ties,
+the candidate with the highest posterior probability is chosen.}
 
 \item{intermediateResults}{Should intermediate subset partitions be returned?}
 
@@ -66,7 +68,7 @@ indicating not allocated.  If \code{TRUE}, an integer matrix with intermediate s
 partitions in the rows.
 \item \code{n_items}: Number of items in the estimated subset partition.
 \item \code{probability}: Monte Carlo estimate of the probability of the subset partition.
-\item \code{auc}: If \code{intermediateResults} is \code{TRUE}, this element is provided and gives
+\item \code{AUChips}: If \code{intermediateResults} is \code{TRUE}, this element is provided and gives
 the area under the probability curve as a function of the number of clusters
 after scaling to be between 0 and 1.
 \item \code{chips_and_salso_partition}: If \code{andSALSO} is \code{TRUE}, this element is provided and
@@ -81,17 +83,24 @@ marginal probability based on samples from a partition distribution
 using the conditional high inclusion probability subset (CHIPS) partition
 greedy search method (Barrientos, Page, Dahl, Dunson, 2024).
 }
+\details{
+A complete, end-to-end demonstration is provided in the package demo.
+To run it and to access the accompanying synthetic dataset:
+\itemize{
+\item Run the demo: \code{demo("chips", package = "salso")}
+\item Load the synthetic data used in the demo: \code{data("synthetic", package = "salso")}
+}
+}
 \examples{
-# For examples, use 'nCores = 1' per CRAN rules, but in practice omit this.
 data(iris.clusterings)
 draws <- iris.clusterings
 
+# For examples, use 'nRuns = 1' and 'nCores = 1' for CRAN, but in practice omit this.
 all <- chips(draws, nRuns = 1, nCores = 1)
-plot(all$n_items, all$probability)
+plot(all$n_items, all$probability, type = "l")
+subpartition <- threshold(all, 0.80, nCores = 1)
+str(subpartition)
 
-x <- chips(draws, threshold = 0.5, nCores = 1)
-table(x$chips_partition)
-which(x$chips_partition != -1)
-x
+# See the full CHIPS demo run: demo("chips", package = "salso")
 
 }
