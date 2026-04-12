@@ -1,3 +1,9 @@
+0.3.77 (2026-04-11)
+  * Update latest dependencies.
+
+0.3.73 (2026-03-14)
+  * Latest Roxido framework.
+
 0.3.69 (2026-03-07)
   * Fixed CHIPS to select, among candidates with the most allocated items, the one with the highest posterior probability.
   * Latest Roxido framework.
